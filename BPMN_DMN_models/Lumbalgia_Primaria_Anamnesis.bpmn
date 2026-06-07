@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://ics.cat/cu3-lumbalgia" exporter="Flowable Design" exporterVersion="2025.2.04" design:palette="flowable-work-process-palette">
+  <process id="Lumbalgia_Primaria_Anamnesis" name="Lumbalgia Primaria - Anamnesis" isExecutable="true">
+    <documentation>POC Clinical Pathway Low Back Pain (v7).
+Schema based on the client's "Lumbalgia Templates Simple" schema.
+
+Triggers (3):
+1st trigger · Reason for Encounter in the generic VISIT template → DMN1 decides process start.
+2nd trigger · Red Flags in the Lumbalgia Checklist template.
+3rd trigger · Yellow Flags in the Lumbalgia Checklist template.
+
+DMNs:
+· cu3_reason_for_encounter.dmn — input: diagnostic code; output: startProcess + processType.
+· cu3_lumbalgia_flags_routing.dmn — input: redFlagsPresent + yellowFlagsPresent; output: triageDestination.
+
+Planned openEHR templates (according to client schema):
+· Generic VISIT template — Reason for Encounter, Anamnesis, Examination, Specific Questionnaire, PROM, Prescriptions, Requests.
+· Lumbalgia Checklist Template — Red flags + Yellow flags.
+· PROM Template — Self reported data EQ-5D-5L.
+· Digital Asset Template — POS service request.
+· Folder "POC Lumbalgia Templates" + ADMIN_COMPOSITION "POC care orchestration record" (Admin Folders).
+
+Reference GPC: ICS Low Back Pain (https://scientiasalut.gencat.cat/handle/11351/4526.2).
+Pending adjustment with the client: ICD/SNOMED codes in DMN1, set of Red/Yellow Flags and specific care pathway for Yellow Flags.</documentation>
+    <extensionElements>
+      <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+      <design:dataproperties dataproperty_id="dp_ehrId" dataproperty_name="ehrId" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_patientId" dataproperty_name="patientId" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_folderUid" dataproperty_name="folderUid_lumbalgia" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_adminCompositionUid" dataproperty_name="adminCompositionUid" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_reasonCode" dataproperty_name="reasonForEncounterCode" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_startProcess" dataproperty_name="startProcess" dataproperty_type="boolean"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_processType" dataproperty_name="processType" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_redFlags" dataproperty_name="redFlagsPresent" dataproperty_type="boolean"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_yellowFlags" dataproperty_name="yellowFlagsPresent" dataproperty_type="boolean"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_triage" dataproperty_name="triageDestination" dataproperty_type="string"></design:dataproperties>
+      <design:creationdate><![CDATA[2026-05-14T11:36:41.479Z]]></design:creationdate>
+      <design:modificationdate><![CDATA[2026-05-22T09:23:56.082Z]]></design:modificationdate>
+    </extensionElements>
+    <serviceTask id="cdr_Register_Start_Administrative_Composition" name="[CDR] Register Phase Start in Administrative Composition" flowable:type="external-worker" flowable:topic="task_cdr_Register_Change_Phase_Administrative_Composition">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId" target="ehrId"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeCompositionType" target="admistrativeCompositionType"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processDefinition" target="processDefinition"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="phase" target="phase"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="change" target="change"></flowable:externalWorkerInParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="cdr_Register_End_Administrative_Composition" name="[CDR] Register Phase End in Administrative Composition" flowable:type="external-worker" flowable:topic="task_cdr_Register_Change_Phase_Administrative_Composition">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId" target="ehrId"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeCompositionType" target="admistrativeCompositionType"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processDefinition" target="processDefinition"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="phase" target="phase"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="change" target="change"></flowable:externalWorkerInParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <userTask id="ut_template_lumprianm_redyellowFlagsChecklist" name="[TIETO] Red/Yellow Flags Checklist" flowable:candidateGroups="clinicians" flowable:formKey="form_lumbalgia_redFlags" flowable:formFieldValidation="false">
+      <documentation>Template: Lumbalgia Checklist (Red Flags section). The clinician answers the ICS Red Flags questionnaire (age, neoplastic history, weight loss, fever, corticosteroids, IV drug use, trauma, recent spinal surgery, neurological deficit, saddle anaesthesia, urinary/faecal retention, night pain). Result: variable redFlagsPresent (boolean). PENDING ADJUSTMENT of the exact question list with the client.</documentation>
+      <extensionElements>
+        <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+        <flowable:allowed-input-item><![CDATA[ehrId]]></flowable:allowed-input-item>
+        <flowable:allowed-input-item><![CDATA[templateId]]></flowable:allowed-input-item>
+        <flowable:allowed-input-item><![CDATA[archetypes]]></flowable:allowed-input-item>
+        <flowable:allowed-output-item><![CDATA[redFlags_object_version_id]]></flowable:allowed-output-item>
+        <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <serviceTask id="cdr_extract_composition_variables_redflags" name="[CDR] Extract RedFlags/YellowFlags from Composition" flowable:type="external-worker" flowable:topic="task_cdr_extract_composition_variables" flowable:exclusive="false">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId" target="ehrId"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="redFlags_object_version_id" target="object_version_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="extract_variables_config" target="extract_variables_config"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerOutParameter source="extract_variables_values" target="extract_variables_values"></flowable:externalWorkerOutParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <scriptTask id="processValueExtractVariablesRedFlag" name="Process Extract Variables RedFlag/Yellow" scriptFormat="javascript" flowable:resultVariable="redflag_variables_values" flowable:autoStoreVariables="false">
+      <extensionElements>
+        <flowable:in source="extract_variables_values" target="extract_variables_values"></flowable:in>
+        <design:stencilid><![CDATA[ScriptTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+      <script><![CDATA[var value = execution.getVariable("extract_variables_values");
+execution.setVariable("redflag_variables_values",value);
+return value;]]></script>
+    </scriptTask>
+    <startEvent id="sub_start_checklist" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+        <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </startEvent>
+    <endEvent id="EndNoneEvent_52">
+      <extensionElements>
+        <design:stencilid><![CDATA[EndTerminateEvent]]></design:stencilid>
+      </extensionElements>
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="SequenceFlow_16" sourceRef="cdr_Register_Start_Administrative_Composition" targetRef="ut_template_lumprianm_redyellowFlagsChecklist">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_64" sourceRef="cdr_Register_End_Administrative_Composition" targetRef="EndNoneEvent_52">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_58" sourceRef="ut_template_lumprianm_redyellowFlagsChecklist" targetRef="cdr_extract_composition_variables_redflags">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_56" sourceRef="cdr_extract_composition_variables_redflags" targetRef="processValueExtractVariablesRedFlag">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_72" sourceRef="processValueExtractVariablesRedFlag" targetRef="cdr_Register_End_Administrative_Composition">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_54" sourceRef="sub_start_checklist" targetRef="cdr_Register_Start_Administrative_Composition">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <dataObject id="dp_ehrId" name="ehrId" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_patientId" name="patientId" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_folderUid" name="folderUid_lumbalgia" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_adminCompositionUid" name="adminCompositionUid" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_reasonCode" name="reasonForEncounterCode" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_startProcess" name="startProcess" itemSubjectRef="xsd:boolean"></dataObject>
+    <dataObject id="dp_processType" name="processType" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_redFlags" name="redFlagsPresent" itemSubjectRef="xsd:boolean"></dataObject>
+    <dataObject id="dp_yellowFlags" name="yellowFlagsPresent" itemSubjectRef="xsd:boolean"></dataObject>
+    <dataObject id="dp_triage" name="triageDestination" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <textAnnotation id="TextAnnotation_5">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: ehrId-> OpenEHR patient identifier
+IN: admistrativeComposition_hier_object_id-> Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-> Identifies, for administrative compositions, the type of Clinical Process
+IN: processDefinition-> Identifies the Business Process and also the entity within the Administrative Composition
+Out: valueVariablesRegFlag: values of the red flag indicators present in the composition
+Out: valueVariablesYellowFlag: values of the yellow flag indicators present in the composition]]></design:text>
+      </extensionElements>
+      <text>IN: ehrId-&gt; OpenEHR patient identifier
+IN: admistrativeComposition_hier_object_id-&gt; Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-&gt; Identifies, for administrative compositions, the type of Clinical Process
+IN: processDefinition-&gt; Identifies the Business Process and also the entity within the Administrative Composition
+Out: valueVariablesRegFlag: values of the red flag indicators present in the composition
+Out: valueVariablesYellowFlag: values of the yellow flag indicators present in the composition</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_14">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: admistrativeComposition_hier_object_id-> Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-> Identifies, for administrative compositions, the type of Clinical Process
+IN: processDefinition-> Identifies the Business Process and also the entity within the Administrative Composition
+IN: phase=Anamnesis -> Identifies the Anamnesis phase
+IN: change=Start]]></design:text>
+      </extensionElements>
+      <text>IN: admistrativeComposition_hier_object_id-&gt; Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-&gt; Identifies, for administrative compositions, the type of Clinical Process
+IN: processDefinition-&gt; Identifies the Business Process and also the entity within the Administrative Composition
+IN: phase=Anamnesis -&gt; Identifies the Anamnesis phase
+IN: change=Start</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_17">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: ehrId-> OpenEHR patient identifier
+IN: template-> Identifies the Template of the Composition to be saved
+IN: archetypes -> archetypes of the Template to Manage
+
+OUT: redFlags_object_version_id: Indicates the composition where the data related to the Task has been saved
+
+]]></design:text>
+      </extensionElements>
+      <text>IN: ehrId-&gt; OpenEHR patient identifier
+IN: template-&gt; Identifies the Template of the Composition to be saved
+IN: archetypes -&gt; archetypes of the Template to Manage
+
+OUT: redFlags_object_version_id: Indicates the composition where the data related to the Task has been saved
+
+</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_34">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[
+IN: pathCompositionTask: Indicates the composition where the data related to the Task has been saved
+IN: versionCompositionTask: version of the composition where the data related to the Task is stored specifically
+IN: defVariablesExtraccion: indicates the variables to be extracted from the composition
+
+Out: valueExtractVariables: values extracted from the composition]]></design:text>
+      </extensionElements>
+      <text>
+IN: pathCompositionTask: Indicates the composition where the data related to the Task has been saved
+IN: versionCompositionTask: version of the composition where the data related to the Task is stored specifically
+IN: defVariablesExtraccion: indicates the variables to be extracted from the composition
+
+Out: valueExtractVariables: values extracted from the composition</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_68">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: admistrativeComposition_hier_object_id-> Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-> Identifies, for administrative compositions, the type of Clinical Process
+IN: processDefinition-> Identifies the Business Process and also the entity within the Administrative Composition
+IN: phase=Anamnesis -> Identifies the Anamnesis phase
+IN: change=End]]></design:text>
+      </extensionElements>
+      <text>IN: admistrativeComposition_hier_object_id-&gt; Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-&gt; Identifies, for administrative compositions, the type of Clinical Process
+IN: processDefinition-&gt; Identifies the Business Process and also the entity within the Administrative Composition
+IN: phase=Anamnesis -&gt; Identifies the Anamnesis phase
+IN: change=End</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_54">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[Out: redflag_variables_values: values of the red flag indicators present in the composition
+Out: yellowflag_variables_values: values of the yellow flag indicators present in the composition]]></design:text>
+      </extensionElements>
+      <text>Out: redflag_variables_values: values of the red flag indicators present in the composition
+Out: yellowflag_variables_values: values of the yellow flag indicators present in the composition</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_66">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: extract_variables_values
+OUT: redflag_variables_values
+IN: extract_variables_values
+OUT: yellowflag_variables_values
+]]></design:text>
+      </extensionElements>
+      <text>IN: extract_variables_values
+OUT: redflag_variables_values
+IN: extract_variables_values
+OUT: yellowflag_variables_values
+</text>
+    </textAnnotation>
+    <association id="AssociationUndirected_27" sourceRef="cdr_Register_Start_Administrative_Composition" targetRef="TextAnnotation_14" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_69" sourceRef="cdr_Register_End_Administrative_Composition" targetRef="TextAnnotation_68" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_18" sourceRef="ut_template_lumprianm_redyellowFlagsChecklist" targetRef="TextAnnotation_17" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_59" sourceRef="cdr_extract_composition_variables_redflags" targetRef="TextAnnotation_34" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_67" sourceRef="processValueExtractVariablesRedFlag" targetRef="TextAnnotation_66" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_29" sourceRef="sub_start_checklist" targetRef="TextAnnotation_5" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Lumbalgia_Primaria_Anamnesis">
+    <bpmndi:BPMNPlane bpmnElement="Lumbalgia_Primaria_Anamnesis" id="BPMNPlane_Lumbalgia_Primaria_Anamnesis">
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_5" id="BPMNShape_TextAnnotation_5">
+        <omgdc:Bounds height="161.0" width="680.0" x="-872.532727535904" y="-626.183394981257"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_14" id="BPMNShape_TextAnnotation_14">
+        <omgdc:Bounds height="101.0" width="859.0" x="-397.97922706792735" y="-797.9116464469831"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_17" id="BPMNShape_TextAnnotation_17">
+        <omgdc:Bounds height="100.0" width="612.0" x="156.28812838233742" y="-189.2299322097231"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_34" id="BPMNShape_TextAnnotation_34">
+        <omgdc:Bounds height="83.0" width="612.0" x="449.01835011142043" y="-684.3918043471933"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_68" id="BPMNShape_TextAnnotation_68">
+        <omgdc:Bounds height="131.0" width="347.0" x="1360.5335165682734" y="-185.08289846345556"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_54" id="BPMNShape_TextAnnotation_54">
+        <omgdc:Bounds height="57.0" width="521.9999999999998" x="1669.6323390634745" y="-425.67249202504047"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_66" id="BPMNShape_TextAnnotation_66">
+        <omgdc:Bounds height="65.0" width="253.0" x="965.8407154337713" y="-171.7299322097231"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cdr_Register_Start_Administrative_Composition" id="BPMNShape_cdr_Register_Start_Administrative_Composition">
+        <omgdc:Bounds height="91.0" width="141.0" x="-38.979227067927354" y="-377.08135943279206"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cdr_Register_End_Administrative_Composition" id="BPMNShape_cdr_Register_End_Administrative_Composition">
+        <omgdc:Bounds height="91.0" width="141.0" x="1463.5335165682734" y="-377.08135943279206"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ut_template_lumprianm_redyellowFlagsChecklist" id="BPMNShape_ut_template_lumprianm_redyellowFlagsChecklist">
+        <omgdc:Bounds height="60.0" width="159.99999999999994" x="382.28812838233745" y="-361.58135943279206"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cdr_extract_composition_variables_redflags" id="BPMNShape_cdr_extract_composition_variables_redflags">
+        <omgdc:Bounds height="80.0" width="100.0" x="705.0183501114204" y="-371.58135943279206"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="processValueExtractVariablesRedFlag" id="BPMNShape_processValueExtractVariablesRedFlag">
+        <omgdc:Bounds height="80.0" width="100.0" x="1042.3407154337713" y="-371.58135943279206"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sub_start_checklist" id="BPMNShape_sub_start_checklist">
+        <omgdc:Bounds height="30.0" width="30.0" x="-547.532727535904" y="-346.3719448987258"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EndNoneEvent_52" id="BPMNShape_EndNoneEvent_52">
+        <omgdc:Bounds height="28.0" width="28.0" x="1808.8162080607392" y="-345.58135943279206"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_27" id="BPMNEdge_AssociationUndirected_27" flowable:sourceDockerX="71.0" flowable:sourceDockerY="46.0" flowable:targetDockerX="430.0" flowable:targetDockerY="51.0">
+        <omgdi:waypoint x="30.0" y="-377.0"></omgdi:waypoint>
+        <omgdi:waypoint x="31.0" y="-696.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_16" id="BPMNEdge_SequenceFlow_16" flowable:sourceDockerX="71.0" flowable:sourceDockerY="46.0" flowable:targetDockerX="80.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="101.0" y="-331.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.84259259259255" y="-330.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_69" id="BPMNEdge_AssociationUndirected_69" flowable:sourceDockerX="71.0" flowable:sourceDockerY="46.0" flowable:targetDockerX="174.0" flowable:targetDockerY="66.0">
+        <omgdi:waypoint x="1533.9584738511273" y="-286.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1533.9584738511273" y="-233.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1532.9584738511273" y="-233.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1533.4126640070715" y="-185.08289846345556"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_59" id="BPMNEdge_AssociationUndirected_59" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="306.0" flowable:targetDockerY="42.0">
+        <omgdi:waypoint x="755.0" y="-371.0"></omgdi:waypoint>
+        <omgdi:waypoint x="755.0" y="-486.0"></omgdi:waypoint>
+        <omgdi:waypoint x="755.0" y="-486.0"></omgdi:waypoint>
+        <omgdi:waypoint x="755.0134962592571" y="-601.3918043471933"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_56" id="BPMNEdge_SequenceFlow_56" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="805.0" y="-331.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1042.0" y="-331.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_18" id="BPMNEdge_AssociationUndirected_18" flowable:sourceDockerX="80.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="306.0" flowable:targetDockerY="50.0">
+        <omgdi:waypoint x="460.84259259259255" y="-300.0"></omgdi:waypoint>
+        <omgdi:waypoint x="460.84259259259255" y="-244.0"></omgdi:waypoint>
+        <omgdi:waypoint x="462.0" y="-244.0"></omgdi:waypoint>
+        <omgdi:waypoint x="462.15062327786706" y="-189.2299322097231"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_29" id="BPMNEdge_AssociationUndirected_29" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="340.0" flowable:targetDockerY="81.0">
+        <omgdi:waypoint x="-532.0" y="-345.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-532.0" y="-465.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_58" id="BPMNEdge_SequenceFlow_58" flowable:sourceDockerX="80.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="541.8425925925926" y="-331.0"></omgdi:waypoint>
+        <omgdi:waypoint x="705.0" y="-331.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_64" id="BPMNEdge_SequenceFlow_64" flowable:sourceDockerX="71.0" flowable:sourceDockerY="46.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1603.9584738511273" y="-331.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1807.9584738511273" y="-331.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_54" id="BPMNEdge_SequenceFlow_54" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="71.0" flowable:targetDockerY="46.0">
+        <omgdi:waypoint x="-517.0" y="-331.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-38.0" y="-331.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_67" id="BPMNEdge_AssociationUndirected_67" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="127.0" flowable:targetDockerY="33.0">
+        <omgdi:waypoint x="1092.0" y="-291.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1092.0" y="-171.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_72" id="BPMNEdge_SequenceFlow_72" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="71.0" flowable:targetDockerY="46.0">
+        <omgdi:waypoint x="1142.3407154337713" y="-331.58135943279206"></omgdi:waypoint>
+        <omgdi:waypoint x="1463.5335165682734" y="-331.58135943279206"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

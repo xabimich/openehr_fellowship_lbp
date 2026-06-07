@@ -1,0 +1,79 @@
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:flowable="http://flowable.org/dmn" xmlns:design="http://flowable.org/design" id="definition_reason_for_encounter" name="Routing Reason for Encounter" namespace="http://www.flowable.org/dmn">
+  <decision id="reason_for_encounter" name="Routing Reason for Encounter">
+    <description>Entry DMN for the process. Evaluates the diagnostic code of the Reason for Encounter captured in the generic VISIT template (1st trigger) and decides whether to start the Low Back Pain Clinical Pathway process or not.
+
+Hit policy: FIRST (first matching rule wins).
+Defa...</description>
+    <decisionTable id="decisionTable_reason_for_encounter" hitPolicy="FIRST">
+      <input label="Reason for Encounter Code">
+        <inputExpression id="inputExpression_inputExpr_reasonCode" typeRef="string">
+          <text>reasonForEncounterCode</text>
+        </inputExpression>
+      </input>
+      <output id="outputExpression_output_startProcess" label="Process Start" name="startProcess" typeRef="boolean"></output>
+      <output id="outputExpression_output_processType" label="Process Type" name="processDefinition" typeRef="string"></output>
+      <output id="outputExpression_8f709c3b-0eb2-4c8f-9abb-6ccb4993c4b2" label="codeClinicalProcessName" name="codeClinicalProcessName" typeRef="string"></output>
+      <output id="outputExpression_150093c5-b03d-4383-a3c4-56313c21cba6" label="valueClinicalProcessName" name="valueClinicalProcessName" typeRef="string"></output>
+      <output id="outputExpression_15cfdcea-e782-406c-85a4-4a8976fb671a" label="codeProcessType" name="codeProcessType" typeRef="string"></output>
+      <output id="outputExpression_51a42108-2a7d-4368-9a2d-1afc0e492a5c" label="valueProcessType" name="valueProcessType" typeRef="string"></output>
+      <output id="outputExpression_b33447c9-13fe-4ad8-af14-4b9e98660d0e" label="processDefinition" name="processDefinition" typeRef="string"></output>
+      <rule>
+        <inputEntry id="inputEntry_inputExpr_reasonCode_1">
+          <extensionElements>
+            <flowable:operator xmlns:flowable="http://flowable.org/dmn">IS IN</flowable:operator>
+            <flowable:expression xmlns:flowable="http://flowable.org/dmn">"M54.5","M54.4","279039007","10005834"</flowable:expression>
+          </extensionElements>
+          <text><![CDATA[${collection:allOf('"M54.5","M54.4","279039007","10005834"', reasonForEncounterCode)}]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_output_startProcess_1">
+          <text><![CDATA[true]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_output_processType_1">
+          <text><![CDATA["Lumbalgia_Primaria"]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_8f709c3b-0eb2-4c8f-9abb-6ccb4993c4b2_1">
+          <text><![CDATA["code_lumbalgia"]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_150093c5-b03d-4383-a3c4-56313c21cba6_1">
+          <text><![CDATA["value_lumbalgia"]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_15cfdcea-e782-406c-85a4-4a8976fb671a_1">
+          <text><![CDATA["code_lumbalgia_primaria"]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_51a42108-2a7d-4368-9a2d-1afc0e492a5c_1">
+          <text><![CDATA["value_lumbalgia_primaria"]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_b33447c9-13fe-4ad8-af14-4b9e98660d0e_1">
+          <text><![CDATA[""]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_inputExpr_reasonCode_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_output_startProcess_2">
+          <text><![CDATA[false]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_output_processType_2">
+          <text><![CDATA[""]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_8f709c3b-0eb2-4c8f-9abb-6ccb4993c4b2_2">
+          <text><![CDATA[""]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_150093c5-b03d-4383-a3c4-56313c21cba6_2">
+          <text><![CDATA[""]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_15cfdcea-e782-406c-85a4-4a8976fb671a_2">
+          <text><![CDATA[""]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_51a42108-2a7d-4368-9a2d-1afc0e492a5c_2">
+          <text><![CDATA[""]]></text>
+        </outputEntry>
+        <outputEntry id="outputEntry_b33447c9-13fe-4ad8-af14-4b9e98660d0e_2">
+          <text><![CDATA[""]]></text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI></dmndi:DMNDI>
+</definitions>

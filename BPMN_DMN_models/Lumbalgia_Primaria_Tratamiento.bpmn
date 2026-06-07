@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://flowable.org/test" exporter="Flowable Design" exporterVersion="2025.2.04" design:palette="flowable-work-process-palette">
+  <process id="Lumbalgia_Primaria_Tratamiento" name="Lower Back Pain Primary - Treatment" isExecutable="true" flowable:candidateStarterGroups="flowableUser">
+    <extensionElements>
+      <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+      <design:creationdate><![CDATA[2026-05-14T11:46:29.236Z]]></design:creationdate>
+      <design:modificationdate><![CDATA[2026-05-22T09:54:21.813Z]]></design:modificationdate>
+    </extensionElements>
+    <serviceTask id="cdr_Register_Start_Administrative_Composition" name="[CDR] Register Phase Start in Administrative Composition" flowable:type="external-worker" flowable:topic="task_cdr_Register_Change_Phase_Administrative_Composition">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId" target="ehrId"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeCompositionType" target="admistrativeCompositionType"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processDefinition" target="processDefinition"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="phase" target="phase"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="change" target="change"></flowable:externalWorkerInParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="cdr_Register_End_Administrative_Composition" name="[CDR] Register Phase End in Administrative Composition" flowable:type="external-worker" flowable:topic="task_cdr_Register_Change_Phase_Administrative_Composition">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId" target="ehrId"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeCompositionType" target="admistrativeCompositionType"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processDefinition" target="processDefinition"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="phase" target="phase"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="change" target="change"></flowable:externalWorkerInParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <userTask id="ut_template_lumprianm_prescripcionsPeticions" name="[Tieto]Pharmacological Prescription" flowable:candidateGroups="clinicians" flowable:formKey="form_visit_generic_prescripcions" flowable:formFieldValidation="false">
+      <documentation>Generic VISIT template (Prescriptions + Requests) and, optionally, "Digital Asset" template to issue POS service request. openEHR archetypes: INSTRUCTION.medication_order.v3, INSTRUCTION.service_request.v1, ACTION.service.v0.</documentation>
+      <extensionElements>
+        <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+        <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <userTask id="FormTask_81" name="[Tieto]Digital Asset Prescription" flowable:candidateGroups="clinicians" flowable:formKey="form_visit_generic_prescripcions" flowable:formFieldValidation="false">
+      <documentation>Generic VISIT template (Prescriptions + Requests) and, optionally, "Digital Asset" template to issue POS service request. openEHR archetypes: INSTRUCTION.medication_order.v3, INSTRUCTION.service_request.v1, ACTION.service.v0.</documentation>
+      <extensionElements>
+        <flowable:task-candidates-type><![CDATA[all]]></flowable:task-candidates-type>
+        <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </userTask>
+    <startEvent id="startnoneevent1" flowable:initiator="initiator" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+        <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+      </extensionElements>
+    </startEvent>
+    <endEvent id="EndNoneEvent_74">
+      <extensionElements>
+        <design:stencilid><![CDATA[EndTerminateEvent]]></design:stencilid>
+      </extensionElements>
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="SequenceFlow_86" sourceRef="cdr_Register_Start_Administrative_Composition" targetRef="ut_template_lumprianm_prescripcionsPeticions">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_84" sourceRef="cdr_Register_End_Administrative_Composition" targetRef="EndNoneEvent_74">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_83" sourceRef="ut_template_lumprianm_prescripcionsPeticions" targetRef="FormTask_81">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_82" sourceRef="FormTask_81" targetRef="cdr_Register_End_Administrative_Composition">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_85" sourceRef="startnoneevent1" targetRef="cdr_Register_Start_Administrative_Composition">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <textAnnotation id="TextAnnotation_46">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: processDefinition-> Identifies the Business Process and also the entity within the Administrative Composition
+IN: idEHR-> OpenEHR patient identifier
+IN: idComposition-> Id Composition Reason for Encounter
+IN: pathFolderProcesoClinicio-> Identifies the Clinical Process Folder
+IN: pathCompositionAdministrative-> Identifies the Administrative Composition of the indicated Type
+IN: CompositionAdministrativeType-> Identifies, for administrative compositions, the type of Clinical Process
+IN: FolderType-> Identifies, for Clinical Process Folders, the type of Clinical Process
+
+OUT: idInstanciaProceso-> Business Process Identifier]]></design:text>
+      </extensionElements>
+      <text>IN: processDefinition-&gt; Identifies the Business Process and also the entity within the Administrative Composition
+IN: idEHR-&gt; OpenEHR patient identifier
+IN: idComposition-&gt; Id Composition Reason for Encounter
+IN: pathFolderProcesoClinicio-&gt; Identifies the Clinical Process Folder
+IN: pathCompositionAdministrative-&gt; Identifies the Administrative Composition of the indicated Type
+IN: CompositionAdministrativeType-&gt; Identifies, for administrative compositions, the type of Clinical Process
+IN: FolderType-&gt; Identifies, for Clinical Process Folders, the type of Clinical Process
+
+OUT: idInstanciaProceso-&gt; Business Process Identifier</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_71">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: idEHR-> OpenEHR patient identifier
+IN: template-> Identifies the Template of the Composition to be saved
+IN: archetypes -> archetypes of the Template to Manage
+
+OUT: prescripcionsPeticions_object_version_id]]></design:text>
+      </extensionElements>
+      <text>IN: idEHR-&gt; OpenEHR patient identifier
+IN: template-&gt; Identifies the Template of the Composition to be saved
+IN: archetypes -&gt; archetypes of the Template to Manage
+
+OUT: prescripcionsPeticions_object_version_id</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_80">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[Low Back Pain Processing]]></design:text>
+      </extensionElements>
+      <text>Low Back Pain Processing</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_81">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[Treated Low Back Pain]]></design:text>
+      </extensionElements>
+      <text>Treated Low Back Pain</text>
+    </textAnnotation>
+    <association id="AssociationUndirected_81" sourceRef="ut_template_lumprianm_prescripcionsPeticions" targetRef="TextAnnotation_71" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_47" sourceRef="startnoneevent1" targetRef="TextAnnotation_46" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Lumbalgia_Primaria_Tratamiento">
+    <bpmndi:BPMNPlane bpmnElement="Lumbalgia_Primaria_Tratamiento" id="BPMNPlane_Lumbalgia_Primaria_Tratamiento">
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_46" id="BPMNShape_TextAnnotation_46">
+        <omgdc:Bounds height="152.0" width="706.0" x="37.8981185110448" y="-219.82617285620424"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_71" id="BPMNShape_TextAnnotation_71">
+        <omgdc:Bounds height="62.0" width="388.0" x="1040.8019752102632" y="-36.977390974575044"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cdr_Register_Start_Administrative_Composition" id="BPMNShape_cdr_Register_Start_Administrative_Composition">
+        <omgdc:Bounds height="107.0" width="131.0" x="613.170867447981" y="180.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cdr_Register_End_Administrative_Composition" id="BPMNShape_cdr_Register_End_Administrative_Composition">
+        <omgdc:Bounds height="107.0" width="131.0" x="1752.028901281543" y="180.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ut_template_lumprianm_prescripcionsPeticions" id="BPMNShape_ut_template_lumprianm_prescripcionsPeticions">
+        <omgdc:Bounds height="60.0" width="180.0" x="1045.401736585852" y="204.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="FormTask_81" id="BPMNShape_FormTask_81">
+        <omgdc:Bounds height="60.0" width="180.0" x="1396.0235589157205" y="204.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_80" id="BPMNShape_TextAnnotation_80">
+        <omgdc:Bounds height="50.0" width="120.0" x="256.0" y="273.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_81" id="BPMNShape_TextAnnotation_81">
+        <omgdc:Bounds height="50.0" width="120.0" x="2254.0236847260558" y="300.9931855495984"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startnoneevent1" id="BPMNShape_startnoneevent1">
+        <omgdc:Bounds height="30.0" width="30.0" x="301.0" y="219.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EndNoneEvent_74" id="BPMNShape_EndNoneEvent_74">
+        <omgdc:Bounds height="28.0" width="28.0" x="2282.9016690605267" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_47" id="BPMNEdge_AssociationUndirected_47" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="353.0" flowable:targetDockerY="76.0">
+        <omgdi:waypoint x="316.0" y="219.0"></omgdi:waypoint>
+        <omgdi:waypoint x="316.0" y="75.0"></omgdi:waypoint>
+        <omgdi:waypoint x="390.0" y="75.0"></omgdi:waypoint>
+        <omgdi:waypoint x="390.0" y="-67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_81" id="BPMNEdge_AssociationUndirected_81" flowable:sourceDockerX="90.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="194.0" flowable:targetDockerY="31.0">
+        <omgdi:waypoint x="1134.4731908141869" y="204.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1134.4731908141869" y="114.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1340.0" y="114.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1261.983252799246" y="25.022609025424956"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_84" id="BPMNEdge_SequenceFlow_84" flowable:sourceDockerX="66.0" flowable:sourceDockerY="54.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1883.0" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="2282.0" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_85" id="BPMNEdge_SequenceFlow_85" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="66.0" flowable:targetDockerY="54.0">
+        <omgdi:waypoint x="331.0" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="613.0" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_86" id="BPMNEdge_SequenceFlow_86" flowable:sourceDockerX="66.0" flowable:sourceDockerY="54.0" flowable:targetDockerX="90.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="744.170867447981" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1045.401736585852" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_82" id="BPMNEdge_SequenceFlow_82" flowable:sourceDockerX="90.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="66.0" flowable:targetDockerY="54.0">
+        <omgdi:waypoint x="1576.0235589157205" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1752.028901281543" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_83" id="BPMNEdge_SequenceFlow_83" flowable:sourceDockerX="90.0" flowable:sourceDockerY="30.0" flowable:targetDockerX="90.0" flowable:targetDockerY="30.0">
+        <omgdi:waypoint x="1225.401736585852" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1396.0235589157205" y="234.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

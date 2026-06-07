@@ -1,0 +1,406 @@
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:flowable="http://flowable.org/dmn" xmlns:design="http://flowable.org/design" id="definition_yellowflags_routing1" name="Routing Yellow Flags Lumbalgia GPC ICS" namespace="http://www.flowable.org/dmn">
+  <decision id="yellowflags_routing1" name="Routing Yellow Flags Lumbalgia GPC ICS">
+    <description>PROPOSAL pending clinical validation. Evaluates the psychosocial risk factors for chronification (Yellow Flags) captured in the Lumbalgia_Checklist_CD_v0.3 template and decides the intervention according to GPC ICS Low Back Pain and international evidence (NICE, STarT Ba...</description>
+    <decisionTable id="decisionTable_yellowflags_routing1" hitPolicy="FIRST">
+      <input label="STarT Back high risk (score &gt;=4 with psychosocial subscale &gt;=4)">
+        <inputExpression id="inputExpression_ie_startback_high" typeRef="boolean">
+          <text>yf_startback_high_risk</text>
+        </inputExpression>
+      </input>
+      <input label="Pain catastrophising (PCS &gt;=30 or positive self-report)">
+        <inputExpression id="inputExpression_ie_pain_catastrophising" typeRef="boolean">
+          <text>yf_pain_catastrophising</text>
+        </inputExpression>
+      </input>
+      <input label="Kinesiophobia or fear of movement (FABQ &gt;=29 or positive self-report)">
+        <inputExpression id="inputExpression_ie_kinesiophobia" typeRef="boolean">
+          <text>yf_kinesiophobia</text>
+        </inputExpression>
+      </input>
+      <input label="Low mood or depression (PHQ-2/PHQ-9 positive)">
+        <inputExpression id="inputExpression_ie_low_mood" typeRef="boolean">
+          <text>yf_low_mood_depression</text>
+        </inputExpression>
+      </input>
+      <input label="Negative recovery expectations">
+        <inputExpression id="inputExpression_ie_neg_expectations" typeRef="boolean">
+          <text>yf_negative_recovery_expectations</text>
+        </inputExpression>
+      </input>
+      <input label="Work dissatisfaction or conflict, prolonged sick leave">
+        <inputExpression id="inputExpression_ie_work_issues" typeRef="boolean">
+          <text>yf_work_dissatisfaction_or_conflict</text>
+        </inputExpression>
+      </input>
+      <input label="Low social or family support">
+        <inputExpression id="inputExpression_ie_low_support" typeRef="boolean">
+          <text>yf_low_social_support</text>
+        </inputExpression>
+      </input>
+      <input label="Low physical activity and sedentary behaviour">
+        <inputExpression id="inputExpression_ie_low_activity" typeRef="boolean">
+          <text>yf_low_physical_activity</text>
+        </inputExpression>
+      </input>
+      <input label="High pain intensity (VAS &gt;=7/10) in patient questionnaire">
+        <inputExpression id="inputExpression_ie_high_pain_intensity" typeRef="boolean">
+          <text>yf_high_pain_intensity</text>
+        </inputExpression>
+      </input>
+      <output id="outputExpression_out_yellowFlagDestination" label="Yellow Flags Intervention Destination" name="yellowFlagDestination" typeRef="string"></output>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_1">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_1">
+          <text><![CDATA["unitat_dolor"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_2">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_2">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_2">
+          <text><![CDATA["unitat_dolor"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_3">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_3">
+          <text><![CDATA["seguiment_proactiu"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_4">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_4">
+          <text><![CDATA["fisioterapia_activa"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_5">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_5">
+          <text><![CDATA["fisioterapia_activa"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_6">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_6">
+          <text><![CDATA["fisioterapia_activa"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_7">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_7">
+          <text><![CDATA["seguiment_proactiu"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_8">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_8">
+          <text><![CDATA["seguiment_proactiu"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_9">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_9">
+          <text><![CDATA["seguiment_proactiu"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_10">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_10">
+          <text><![CDATA["seguiment_proactiu"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_startback_high_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_pain_catastrophising_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_kinesiophobia_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_mood_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neg_expectations_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_work_issues_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_support_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_low_activity_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_high_pain_intensity_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_yellowFlagDestination_11">
+          <text><![CDATA["none"]]></text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI></dmndi:DMNDI>
+</definitions>

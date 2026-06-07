@@ -1,0 +1,52 @@
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:flowable="http://flowable.org/dmn" xmlns:design="http://flowable.org/design" id="definition_lumbalgia_flags_routing1" name="Routing Red and Yellow Flags Low Back Pain" namespace="http://www.flowable.org/dmn">
+  <decision id="lumbalgia_flags_routing1" name="Routing Red and Yellow Flags Low Back Pain">
+    <description>Evaluates whether there are Red Flags or Yellow Flags in the checklist and decides the next step. Hit policy FIRST. Default continue. Inputs redFlagsPresent boolean and yellowFlagsPresent boolean. Output triageDestination string with values urgencies, yellowFlagsPathway or...</description>
+    <decisionTable id="decisionTable_lumbalgia_flags_routing1" hitPolicy="FIRST">
+      <input label="Red Flags present">
+        <inputExpression id="inputExpression_inputExpr_redFlags" typeRef="boolean">
+          <text>redFlagsPresent</text>
+        </inputExpression>
+      </input>
+      <input label="Yellow Flags present">
+        <inputExpression id="inputExpression_inputExpr_yellowFlags" typeRef="boolean">
+          <text>yellowFlagsPresent</text>
+        </inputExpression>
+      </input>
+      <output id="outputExpression_output_triageDestination" label="Triage Destination" name="triageDestination" typeRef="string"></output>
+      <rule>
+        <inputEntry id="inputEntry_inputExpr_redFlags_1">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_inputExpr_yellowFlags_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_output_triageDestination_1">
+          <text><![CDATA["urgencies"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_inputExpr_redFlags_2">
+          <text><![CDATA[false]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_inputExpr_yellowFlags_2">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_output_triageDestination_2">
+          <text><![CDATA["yellowFlagsPathway"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_inputExpr_redFlags_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_inputExpr_yellowFlags_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_output_triageDestination_3">
+          <text><![CDATA["continue"]]></text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI></dmndi:DMNDI>
+</definitions>

@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://ics.cat/cu3-lumbalgia" exporter="Flowable Design" exporterVersion="2025.2.04" design:palette="flowable-work-process-palette">
+  <process id="Lumbalgia_Primaria_Main" name="Primary Low Back Pain" isExecutable="true">
+    <documentation>POC Clinical Pathway Low Back Pain (v7).
+Schema based on the client's "Lumbalgia Templates Simple" schema.
+
+Triggers (3):
+1st trigger · Reason for Encounter in the generic VISIT template → DMN1 decides process start.
+2nd trigger · Red Flags in the Lumbalgia Checklist template.
+3rd trigger · Yellow Flags in the Lumbalgia Checklist template.
+
+DMNs:
+· cu3_reason_for_encounter.dmn — input: diagnostic code; output: startProcess + processType.
+· cu3_lumbalgia_flags_routing.dmn — input: redFlagsPresent + yellowFlagsPresent; output: triageDestination.
+
+Planned openEHR templates (according to client schema):
+· Generic VISIT template — Reason for Encounter, Anamnesis, Examination, Specific Questionnaire, PROM, Prescriptions, Requests.
+· Lumbalgia Checklist Template — Red flags + Yellow flags.
+· PROM Template — Self reported data EQ-5D-5L.
+· Digital Asset Template — POS service request.
+· Folder "POC Lumbalgia Templates" + ADMIN_COMPOSITION "POC care orchestration record" (Admin Folders).
+
+Reference GPC: ICS Low Back Pain (https://scientiasalut.gencat.cat/handle/11351/4526.2).
+Pending adjustment with the client: ICD/SNOMED codes in DMN1, set of Red/Yellow Flags and specific care pathway for Yellow Flags.</documentation>
+    <extensionElements>
+      <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+      <design:dataproperties dataproperty_id="dp_ehrId" dataproperty_name="ehrId" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_patientId" dataproperty_name="patientId" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_folderUid" dataproperty_name="folderUid_lumbalgia" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_adminCompositionUid" dataproperty_name="adminCompositionUid" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_reasonCode" dataproperty_name="reasonForEncounterCode" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_startProcess" dataproperty_name="startProcess" dataproperty_type="boolean"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_processType" dataproperty_name="processType" dataproperty_type="string"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_redFlags" dataproperty_name="redFlagsPresent" dataproperty_type="boolean"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_yellowFlags" dataproperty_name="yellowFlagsPresent" dataproperty_type="boolean"></design:dataproperties>
+      <design:dataproperties dataproperty_id="dp_triage" dataproperty_name="triageDestination" dataproperty_type="string"></design:dataproperties>
+      <design:creationdate><![CDATA[2026-05-14T11:37:06.581Z]]></design:creationdate>
+      <design:modificationdate><![CDATA[2026-05-25T18:48:35.802Z]]></design:modificationdate>
+    </extensionElements>
+    <serviceTask id="cdr_create_process_in_administrative_composition" name="[CDR] Create Process in Administrative Composition" flowable:type="external-worker" flowable:topic="task_cdr_create_process_in_administrative_composition">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId" target="ehrId"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="codeClinicalProcessName" target="codeClinicalProcessName"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="codeProcessType" target="codeProcessType"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processDefinition" target="processDefinition"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="idInstanciaProceso" target="idInstanciaProceso"></flowable:externalWorkerInParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="ExternalWorkerTask_62" name="[CDR] Finalize Process in Administrative Composition" flowable:type="external-worker" flowable:topic="task_cdr_finalize_process_in_administrative_composition">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId" target="ehrId"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="codeClinicalProcessName" target="codeClinicalProcessName"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="codeProcessType" target="codeProcessType"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processDefinition" target="processDefinition"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processInstance" target="processInstance"></flowable:externalWorkerInParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="ExternalWorkerTask_70" name="[CDR] Finalize Process in Administrative Composition" flowable:type="external-worker" flowable:topic="task_cdr_finalize_process_in_administrative_composition">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId" target="ehrId"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="codeClinicalProcessName" target="codeClinicalProcessName"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="codeProcessType" target="codeProcessType"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processDefinition" target="processDefinition"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processInstance" target="processInstance"></flowable:externalWorkerInParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="ExternalWorkerTask_74" name="[CDR] Finalize Process in Administrative Composition" flowable:type="external-worker" flowable:topic="task_cdr_finalize_process_in_administrative_composition">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId" target="ehrId"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="codeClinicalProcessName" target="codeClinicalProcessName"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="codeProcessType" target="codeProcessType"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processDefinition" target="processDefinition"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processInstance" target="processInstance"></flowable:externalWorkerInParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <callActivity id="CallActivity_LowerBackPainAnamnesis" name="Lumbalgia  Anamnesis " calledElement="Lumbalgia_Primaria_Anamnesis" flowable:sameDeployment="true" flowable:fallbackToDefaultTenant="true">
+      <extensionElements>
+        <flowable:in source="ehrId" target="ehrId"></flowable:in>
+        <flowable:in source="admistrativeCompositionType" target="admistrativeCompositionType"></flowable:in>
+        <flowable:in source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:in>
+        <flowable:in source="processDefinition" target="processDefinition"></flowable:in>
+        <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+      </extensionElements>
+    </callActivity>
+    <serviceTask id="DmnTask_55" name="DMN: Routing Yellow Flags" flowable:type="dmn">
+      <documentation>Calls the DMN cu3_lumbalgia_flags_routing (decisionKey: cu3_lumbalgia_flags_routing).
+Inputs: redFlagsPresent, yellowFlagsPresent.
+Output: triageDestination (urgencies | yellowFlagsPathway | continue).</documentation>
+      <extensionElements>
+        <flowable:field name="decisionTableReferenceKey">
+          <flowable:string><![CDATA[yellowflags_routing1]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="decisionTaskThrowErrorOnNoHits">
+          <flowable:string><![CDATA[false]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="fallbackToDefaultTenant">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="sameDeployment">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:decisionReferenceType><![CDATA[decisionTable]]></flowable:decisionReferenceType>
+        <design:stencilid><![CDATA[DmnTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="brt_dmn_flags" name="DMN: Routing Red Flags" flowable:type="dmn">
+      <documentation>Calls the DMN cu3_lumbalgia_flags_routing (decisionKey: cu3_lumbalgia_flags_routing).
+Inputs: redFlagsPresent, yellowFlagsPresent.
+Output: triageDestination (urgencies | yellowFlagsPathway | continue).</documentation>
+      <extensionElements>
+        <flowable:field name="decisionTableReferenceKey">
+          <flowable:string><![CDATA[redflags_routing1]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="decisionTaskThrowErrorOnNoHits">
+          <flowable:string><![CDATA[false]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="fallbackToDefaultTenant">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="sameDeployment">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:decisionReferenceType><![CDATA[decisionTable]]></flowable:decisionReferenceType>
+        <design:stencilid><![CDATA[DmnTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="gp_createprocess" name="[GP]Create Process Instance" flowable:type="external-worker" flowable:topic="task_gp_createprocess">
+      <extensionElements>
+        <flowable:externalWorkerInParameter source="ehrId " target="ehrId "></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeCompositionType" target="admistrativeCompositionType"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="admistrativeComposition_hier_object_id" target="admistrativeComposition_hier_object_id"></flowable:externalWorkerInParameter>
+        <flowable:externalWorkerInParameter source="processDefinition" target="processDefinition"></flowable:externalWorkerInParameter>
+        <design:stencilid><![CDATA[ExternalWorkerTask]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+      </extensionElements>
+    </serviceTask>
+    <callActivity id="CallActivity_50" name="Diagnosis" calledElement="Lumbalgia_Primaria_Diagnostico" flowable:sameDeployment="true" flowable:fallbackToDefaultTenant="true">
+      <extensionElements>
+        <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+      </extensionElements>
+    </callActivity>
+    <callActivity id="CallActivity_52" name="Treatment" calledElement="Lumbalgia_Primaria_Tratamiento" flowable:sameDeployment="true" flowable:fallbackToDefaultTenant="true">
+      <extensionElements>
+        <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+      </extensionElements>
+    </callActivity>
+    <callActivity id="CallActivity_55" name="Follow-up" calledElement="Lumbalgia_Primaria_Seguimiento" flowable:sameDeployment="true" flowable:fallbackToDefaultTenant="true">
+      <extensionElements>
+        <design:stencilid><![CDATA[CallActivity]]></design:stencilid>
+      </extensionElements>
+    </callActivity>
+    <exclusiveGateway id="gw_triageDestination" name="Triage Destination?" default="SequenceFlow_51">
+      <documentation>Branches the process according to triageDestination returned by DMN 2.</documentation>
+      <extensionElements>
+        <design:stencilid><![CDATA[Exclusive_Databased_Gateway]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+    </exclusiveGateway>
+    <startEvent id="StartNoneEvent_6" flowable:initiator="initiator" flowable:formFieldValidation="false">
+      <extensionElements>
+        <flowable:work-form-field-validation><![CDATA[false]]></flowable:work-form-field-validation>
+        <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+      </extensionElements>
+    </startEvent>
+    <endEvent id="endEvent_urgencies" name="Referral to Emergency">
+      <documentation>Red Flags present → immediate referral to the Emergency Visit (template "Visita URG"). According to the client schema, for the POC it is not necessary to create another Folder + Templates: the emergency visit falls outside the POC Lumbalgia Templates Folder.</documentation>
+      <extensionElements>
+        <design:stencilid><![CDATA[EndTerminateEvent]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <endEvent id="endEvent_yellowFlagsPathway" name="Process Abort">
+      <documentation>Yellow Flags present (without Red Flags) → care pathway PENDING ADJUSTMENT with the client. Common options: referral to Pain Unit, psychosocial intervention, active physiotherapy with cognitive component, proactive follow-up in primary care. This End event is a placeholder replaceable by a specific subprocess when defined.</documentation>
+      <extensionElements>
+        <design:stencilid><![CDATA[EndTerminateEvent]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <endEvent id="endEvent_processCompleted" name="Process Completed">
+      <extensionElements>
+        <design:stencilid><![CDATA[EndTerminateEvent]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="SequenceFlow_58" sourceRef="cdr_create_process_in_administrative_composition" targetRef="CallActivity_LowerBackPainAnamnesis">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_63" sourceRef="ExternalWorkerTask_62" targetRef="endEvent_urgencies">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_73" sourceRef="ExternalWorkerTask_70" targetRef="endEvent_yellowFlagsPathway">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_76" sourceRef="ExternalWorkerTask_74" targetRef="endEvent_processCompleted">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_39" sourceRef="CallActivity_LowerBackPainAnamnesis" targetRef="brt_dmn_flags">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_57" sourceRef="DmnTask_55" targetRef="gw_triageDestination">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_41" sourceRef="brt_dmn_flags" targetRef="DmnTask_55">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_60" sourceRef="gp_createprocess" targetRef="ExternalWorkerTask_62">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_53" sourceRef="CallActivity_50" targetRef="CallActivity_52">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_54" sourceRef="CallActivity_52" targetRef="CallActivity_55">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_56" sourceRef="CallActivity_55" targetRef="ExternalWorkerTask_74">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="sf_yellowFlags" name="yellowFlagsPathway" sourceRef="gw_triageDestination" targetRef="ExternalWorkerTask_70">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${derivacionYellowFlag == True && derivacionRedFlag== False}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_42" name="Referral" sourceRef="gw_triageDestination" targetRef="gp_createprocess">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+        <design:display_ref_in_diagram><![CDATA[true]]></design:display_ref_in_diagram>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${derivacionRedFlag==true]]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_51" sourceRef="gw_triageDestination" targetRef="CallActivity_50">
+      <extensionElements>
+        <flowable:is-default-flow><![CDATA[true]]></flowable:is-default-flow>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_55" sourceRef="StartNoneEvent_6" targetRef="cdr_create_process_in_administrative_composition">
+      <extensionElements>
+        <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+      </extensionElements>
+    </sequenceFlow>
+    <dataObject id="dp_ehrId" name="ehrId" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_patientId" name="patientId" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_folderUid" name="folderUid_lumbalgia" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_adminCompositionUid" name="adminCompositionUid" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_reasonCode" name="reasonForEncounterCode" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_startProcess" name="startProcess" itemSubjectRef="xsd:boolean"></dataObject>
+    <dataObject id="dp_processType" name="processType" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <dataObject id="dp_redFlags" name="redFlagsPresent" itemSubjectRef="xsd:boolean"></dataObject>
+    <dataObject id="dp_yellowFlags" name="yellowFlagsPresent" itemSubjectRef="xsd:boolean"></dataObject>
+    <dataObject id="dp_triage" name="triageDestination" itemSubjectRef="xsd:string">
+      <extensionElements>
+        <flowable:value></flowable:value>
+      </extensionElements>
+    </dataObject>
+    <textAnnotation id="TextAnnotation_5">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: ehrId-> OpenEHR patient identifier
+IN: codeClinicalProcessName -> Clinical Process Code
+IN: codeProcessType -> Process Code within the Clinical Process
+IN: processDefinition -> Definition of Process within the Clinical Process
+IN: admistrativeComposition_hier_object_id-> Identifies the Administrative Composition of the indicated Type
+IN: original_hier_object_id-> Id Composition Reason for Encounter
+
+OUT: idInstanciaProceso-> Business Process Identifier
+
+]]></design:text>
+      </extensionElements>
+      <text>IN: ehrId-&gt; OpenEHR patient identifier
+IN: codeClinicalProcessName -&gt; Clinical Process Code
+IN: codeProcessType -&gt; Process Code within the Clinical Process
+IN: processDefinition -&gt; Definition of Process within the Clinical Process
+IN: admistrativeComposition_hier_object_id-&gt; Identifies the Administrative Composition of the indicated Type
+IN: original_hier_object_id-&gt; Id Composition Reason for Encounter
+
+OUT: idInstanciaProceso-&gt; Business Process Identifier
+
+</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_68">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: ehrId-> OpenEHR patient identifier
+IN: codeClinicalProcessName -> Clinical Process Code
+IN: codeProcessType -> Process Code within the Clinical Process
+IN: processDefinition -> Definition of Process within the Clinical Process
+IN: admistrativeComposition_hier_object_id-> Identifies the Administrative Composition of the indicated Type
+IN: processInstance-> Business Process Identifier]]></design:text>
+      </extensionElements>
+      <text>IN: ehrId-&gt; OpenEHR patient identifier
+IN: codeClinicalProcessName -&gt; Clinical Process Code
+IN: codeProcessType -&gt; Process Code within the Clinical Process
+IN: processDefinition -&gt; Definition of Process within the Clinical Process
+IN: admistrativeComposition_hier_object_id-&gt; Identifies the Administrative Composition of the indicated Type
+IN: processInstance-&gt; Business Process Identifier</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_56">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: ehrId-> OpenEHR patient identifier
+IN: codeClinicalProcessName -> Clinical Process Code
+IN: codeProcessType -> Process Code within the Clinical Process
+IN: processDefinition -> Definition of Process within the Clinical Process
+IN: admistrativeComposition_hier_object_id-> Identifies the Administrative Composition of the indicated Type
+IN: processInstance-> Business Process Identifier]]></design:text>
+      </extensionElements>
+      <text>IN: ehrId-&gt; OpenEHR patient identifier
+IN: codeClinicalProcessName -&gt; Clinical Process Code
+IN: codeProcessType -&gt; Process Code within the Clinical Process
+IN: processDefinition -&gt; Definition of Process within the Clinical Process
+IN: admistrativeComposition_hier_object_id-&gt; Identifies the Administrative Composition of the indicated Type
+IN: processInstance-&gt; Business Process Identifier</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_45">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: processDefinition-> Identifies the Business Process and also the entity within the Administrative Composition
+IN: ehrId-> OpenEHR patient identifier
+IN: admistrativeComposition_hier_object_id-> Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-> Identifies, for administrative compositions, the type of Clinical Process
+
+OUT: idInstanciaProceso-> Business Process Identifier]]></design:text>
+      </extensionElements>
+      <text>IN: processDefinition-&gt; Identifies the Business Process and also the entity within the Administrative Composition
+IN: ehrId-&gt; OpenEHR patient identifier
+IN: admistrativeComposition_hier_object_id-&gt; Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-&gt; Identifies, for administrative compositions, the type of Clinical Process
+
+OUT: idInstanciaProceso-&gt; Business Process Identifier</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_52">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: processDefinition-> Identifies the Business Process and also the entity within the Administrative Composition
+IN: ehrId-> OpenEHR patient identifier
+IN: admistrativeComposition_hier_object_id-> Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-> Identifies, for administrative compositions, the type of Clinical Process
+]]></design:text>
+      </extensionElements>
+      <text>IN: processDefinition-&gt; Identifies the Business Process and also the entity within the Administrative Composition
+IN: ehrId-&gt; OpenEHR patient identifier
+IN: admistrativeComposition_hier_object_id-&gt; Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-&gt; Identifies, for administrative compositions, the type of Clinical Process
+</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_41">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: processDefinition-> Identifies the Business Process and also the entity within the Administrative Composition
+IN: ehrId-> OpenEHR patient identifier
+IN: admistrativeComposition_hier_object_id-> Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-> Identifies, for administrative compositions, the type of Clinical Process
+
+Out: redflag_variables_values: values of the red flag indicators present in the composition
+Out: yellowflag_variables_values: values of the yellow flag indicators present in the composition]]></design:text>
+      </extensionElements>
+      <text>IN: processDefinition-&gt; Identifies the Business Process and also the entity within the Administrative Composition
+IN: ehrId-&gt; OpenEHR patient identifier
+IN: admistrativeComposition_hier_object_id-&gt; Identifies the Administrative Composition of the indicated Type
+IN: admistrativeCompositionType-&gt; Identifies, for administrative compositions, the type of Clinical Process
+
+Out: redflag_variables_values: values of the red flag indicators present in the composition
+Out: yellowflag_variables_values: values of the yellow flag indicators present in the composition</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_13">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: redflag_variables_values: values of the red flag indicators present in the composition
+
+OUT: derivacionRedFlag: indicates whether a referral should be made or we continue]]></design:text>
+      </extensionElements>
+      <text>IN: redflag_variables_values: values of the red flag indicators present in the composition
+
+OUT: derivacionRedFlag: indicates whether a referral should be made or we continue</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_55">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[IN: yellowflag_variables_values: values of the yellow flag indicators present in the composition
+
+OUT: derivacionYellowFlag: indicates whether a referral should be made or we continue]]></design:text>
+      </extensionElements>
+      <text>IN: yellowflag_variables_values: values of the yellow flag indicators present in the composition
+
+OUT: derivacionYellowFlag: indicates whether a referral should be made or we continue</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_65">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[OUT: clinical_process_execution= Finalized
+OUT: reason_for_finalized = Referred to hospital emergency ]]></design:text>
+      </extensionElements>
+      <text>OUT: clinical_process_execution= Finalized
+OUT: reason_for_finalized = Referred to hospital emergency </text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_67">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[OUT: clinical_process_execution= Finalized
+OUT: reason_for_finalized = Clinical Process Completed]]></design:text>
+      </extensionElements>
+      <text>OUT: clinical_process_execution= Finalized
+OUT: reason_for_finalized = Clinical Process Completed</text>
+    </textAnnotation>
+    <textAnnotation id="TextAnnotation_66">
+      <extensionElements>
+        <design:stencilid><![CDATA[TextAnnotation]]></design:stencilid>
+        <design:text><![CDATA[OUT: clinical_process_execution= Aborted
+OUT: reason_for_aborted = Yellow flags pathway (PENDING adjustment)]]></design:text>
+      </extensionElements>
+      <text>OUT: clinical_process_execution= Aborted
+OUT: reason_for_aborted = Yellow flags pathway (PENDING adjustment)</text>
+    </textAnnotation>
+    <association id="AssociationUndirected_59" sourceRef="cdr_create_process_in_administrative_composition" targetRef="TextAnnotation_56" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_69" sourceRef="ExternalWorkerTask_62" targetRef="TextAnnotation_68" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+        <design:defaultflow><![CDATA[false]]></design:defaultflow>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_43" sourceRef="CallActivity_LowerBackPainAnamnesis" targetRef="TextAnnotation_41" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_56" sourceRef="DmnTask_55" targetRef="TextAnnotation_55" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_55" sourceRef="brt_dmn_flags" targetRef="TextAnnotation_13" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_53" sourceRef="CallActivity_50" targetRef="TextAnnotation_52" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_57" sourceRef="CallActivity_52" targetRef="TextAnnotation_52" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_58" sourceRef="CallActivity_55" targetRef="TextAnnotation_52" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+    <association id="AssociationUndirected_7" sourceRef="StartNoneEvent_6" targetRef="TextAnnotation_5" associationDirection="None">
+      <extensionElements>
+        <design:stencilid><![CDATA[AssociationUndirected]]></design:stencilid>
+        <design:stencilsuperid><![CDATA[Association_Undirected]]></design:stencilsuperid>
+      </extensionElements>
+    </association>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Lumbalgia_Primaria_Main">
+    <bpmndi:BPMNPlane bpmnElement="Lumbalgia_Primaria_Main" id="BPMNPlane_Lumbalgia_Primaria_Main">
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_5" id="BPMNShape_TextAnnotation_5">
+        <omgdc:Bounds height="161.0" width="680.0" x="-1053.9102062977354" y="478.4243037936561"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_68" id="BPMNShape_TextAnnotation_68">
+        <omgdc:Bounds height="134.0" width="649.0000000000002" x="1452.0119577884368" y="-484.65503841504625"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_56" id="BPMNShape_TextAnnotation_56">
+        <omgdc:Bounds height="146.0" width="589.0" x="-714.7255095006071" y="-246.72649364383315"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_45" id="BPMNShape_TextAnnotation_45">
+        <omgdc:Bounds height="118.0" width="718.0" x="959.5119577884368" y="-304.2473549161052"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_52" id="BPMNShape_TextAnnotation_52">
+        <omgdc:Bounds height="123.0" width="585.0" x="1047.404983293841" y="588.3409492927472"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_41" id="BPMNShape_TextAnnotation_41">
+        <omgdc:Bounds height="123.0" width="585.0" x="-370.3620763451183" y="345.4243037936561"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_13" id="BPMNShape_TextAnnotation_13">
+        <omgdc:Bounds height="78.0" width="793.0" x="114.12678340288505" y="-164.37080066087947"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_55" id="BPMNShape_TextAnnotation_55">
+        <omgdc:Bounds height="78.0" width="793.0" x="176.34071156320516" y="258.1896435263269"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cdr_create_process_in_administrative_composition" id="BPMNShape_cdr_create_process_in_administrative_composition">
+        <omgdc:Bounds height="147.0" width="178.0" x="-509.22550950060713" y="42.44093495273367"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ExternalWorkerTask_62" id="BPMNShape_ExternalWorkerTask_62">
+        <omgdc:Bounds height="147.0" width="178.0" x="1687.5119577884368" y="-198.8708006608795"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ExternalWorkerTask_70" id="BPMNShape_ExternalWorkerTask_70">
+        <omgdc:Bounds height="126.0" width="178.0" x="1687.5119577884368" y="52.94093495273367"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ExternalWorkerTask_74" id="BPMNShape_ExternalWorkerTask_74">
+        <omgdc:Bounds height="126.0" width="178.0" x="1687.5119577884368" y="281.19588254801613"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CallActivity_LowerBackPainAnamnesis" id="BPMNShape_CallActivity_LowerBackPainAnamnesis">
+        <omgdc:Bounds height="104.0" width="137.0" x="-162.81248529968042" y="63.94093495273367"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_65" id="BPMNShape_TextAnnotation_65">
+        <omgdc:Bounds height="41.0" width="347.0" x="1982.1722433252744" y="-88.69294445459414"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_67" id="BPMNShape_TextAnnotation_67">
+        <omgdc:Bounds height="41.0" width="347.0" x="1955.3730994735502" y="386.4243037936561"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TextAnnotation_66" id="BPMNShape_TextAnnotation_66">
+        <omgdc:Bounds height="28.0" width="480.0" x="1954.499266491216" y="161.51296709362825"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DmnTask_55" id="BPMNShape_DmnTask_55">
+        <omgdc:Bounds height="80.0" width="108.0" x="518.8407115632051" y="85.94093495273367"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="brt_dmn_flags" id="BPMNShape_brt_dmn_flags">
+        <omgdc:Bounds height="80.0" width="100.0" x="287.8184994387242" y="85.94093495273367"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gp_createprocess" id="BPMNShape_gp_createprocess">
+        <omgdc:Bounds height="80.0" width="100.0" x="1065.1315032121067" y="-165.3708006608795"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CallActivity_50" id="BPMNShape_CallActivity_50">
+        <omgdc:Bounds height="80.0" width="100.0" x="1079.8361904813412" y="304.19588254801613"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CallActivity_52" id="BPMNShape_CallActivity_52">
+        <omgdc:Bounds height="80.0" width="100.0" x="1289.904983293841" y="304.19588254801613"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CallActivity_55" id="BPMNShape_CallActivity_55">
+        <omgdc:Bounds height="80.0" width="100.0" x="1474.636090802046" y="304.19588254801613"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gw_triageDestination" id="BPMNShape_gw_triageDestination">
+        <omgdc:Bounds height="40.0" width="40.0" x="892.7619095765978" y="105.94093495273367"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="104.0" x="846.0" y="140.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="StartNoneEvent_6" id="BPMNShape_StartNoneEvent_6">
+        <omgdc:Bounds height="30.0" width="30.0" x="-728.9102062977354" y="100.94093495273367"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endEvent_urgencies" id="BPMNShape_endEvent_urgencies">
+        <omgdc:Bounds height="28.0" width="28.0" x="2003.5662682050886" y="-139.3708006608795"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="119.0" x="1937.1025048599672" y="-169.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endEvent_yellowFlagsPathway" id="BPMNShape_endEvent_yellowFlagsPathway">
+        <omgdc:Bounds height="28.0" width="28.0" x="2003.5662682050886" y="101.94093495273367"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="77.0" x="1907.1025048599672" y="135.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endEvent_processCompleted" id="BPMNShape_endEvent_processCompleted">
+        <omgdc:Bounds height="28.0" width="28.0" x="2141.6722433252744" y="330.19588254801613"></omgdc:Bounds>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="96.0" x="1977.967001700975" y="287.27554527888617"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_69" id="BPMNEdge_AssociationUndirected_69" flowable:sourceDockerX="89.0" flowable:sourceDockerY="74.0" flowable:targetDockerX="325.0" flowable:targetDockerY="67.0">
+        <omgdi:waypoint x="1776.5119577884368" y="-198.8708006608795"></omgdi:waypoint>
+        <omgdi:waypoint x="1776.5119577884368" y="-350.65503841504625"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_39" id="BPMNEdge_SequenceFlow_39" flowable:sourceDockerX="69.0" flowable:sourceDockerY="52.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="-25.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="287.0" y="115.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_58" id="BPMNEdge_AssociationUndirected_58" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="293.0" flowable:targetDockerY="62.0">
+        <omgdi:waypoint x="1524.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1524.0" y="486.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1339.0" y="486.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1339.0" y="588.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_59" id="BPMNEdge_AssociationUndirected_59" flowable:sourceDockerX="89.0" flowable:sourceDockerY="74.0" flowable:targetDockerX="295.0" flowable:targetDockerY="73.0">
+        <omgdi:waypoint x="-420.00000000000006" y="42.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-420.00000000000006" y="-29.363246821916576"></omgdi:waypoint>
+        <omgdi:waypoint x="-420.225509500607" y="-29.363246821916576"></omgdi:waypoint>
+        <omgdi:waypoint x="-420.2255095006071" y="-100.72649364383315"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sf_yellowFlags" id="BPMNEdge_sf_yellowFlags" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="89.0" flowable:targetDockerY="63.0">
+        <omgdi:waypoint x="932.5330111629046" y="125.71203653904053"></omgdi:waypoint>
+        <omgdi:waypoint x="1687.5119577884368" y="116.97132563328127"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="112.0" x="1139.0" y="74.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_55" id="BPMNEdge_SequenceFlow_55" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="89.0" flowable:targetDockerY="74.0">
+        <omgdi:waypoint x="-698.9107509738968" y="115.81310698954603"></omgdi:waypoint>
+        <omgdi:waypoint x="-603.5" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-603.5" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-509.00000000000006" y="115.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_56" id="BPMNEdge_SequenceFlow_56" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="89.0" flowable:targetDockerY="63.0">
+        <omgdi:waypoint x="1574.636090802046" y="344.19588254801613"></omgdi:waypoint>
+        <omgdi:waypoint x="1687.5119577884368" y="344.19588254801613"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_57" id="BPMNEdge_SequenceFlow_57" flowable:sourceDockerX="54.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="626.0" y="125.0"></omgdi:waypoint>
+        <omgdi:waypoint x="892.0" y="125.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_58" id="BPMNEdge_SequenceFlow_58" flowable:sourceDockerX="89.0" flowable:sourceDockerY="74.0" flowable:targetDockerX="69.0" flowable:targetDockerY="52.0">
+        <omgdi:waypoint x="-331.00000000000006" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-162.0" y="115.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_7" id="BPMNEdge_AssociationUndirected_7" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="340.0" flowable:targetDockerY="81.0">
+        <omgdi:waypoint x="-713.7407378080941" y="130.93997760321702"></omgdi:waypoint>
+        <omgdi:waypoint x="-713.0" y="196.5"></omgdi:waypoint>
+        <omgdi:waypoint x="-713.0" y="196.5"></omgdi:waypoint>
+        <omgdi:waypoint x="-713.7080355100682" y="478.4243037936561"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_73" id="BPMNEdge_SequenceFlow_73" flowable:sourceDockerX="89.0" flowable:sourceDockerY="63.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1865.5119577884368" y="115.94093495273367"></omgdi:waypoint>
+        <omgdi:waypoint x="2003.5662682050886" y="115.94093495273367"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_51" id="BPMNEdge_SequenceFlow_51" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="912.2470418716134" y="145.4260672477493"></omgdi:waypoint>
+        <omgdi:waypoint x="907.0" y="344.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1078.504668070663" y="344.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_63" id="BPMNEdge_SequenceFlow_63" flowable:sourceDockerX="89.0" flowable:sourceDockerY="74.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1865.5119577884368" y="-125.3708006608795"></omgdi:waypoint>
+        <omgdi:waypoint x="2003.5662682050886" y="-125.3708006608795"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_41" id="BPMNEdge_SequenceFlow_41" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="54.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="387.0" y="125.0"></omgdi:waypoint>
+        <omgdi:waypoint x="518.0" y="125.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_53" id="BPMNEdge_AssociationUndirected_53" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="293.0" flowable:targetDockerY="62.0">
+        <omgdi:waypoint x="1128.504668070663" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1128.504668070663" y="486.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1339.0" y="486.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1339.5652851120892" y="588.3409492927472"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_53" id="BPMNEdge_SequenceFlow_53" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1178.504668070663" y="344.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1289.0" y="344.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_42" id="BPMNEdge_SequenceFlow_42" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="912.0" y="105.0"></omgdi:waypoint>
+        <omgdi:waypoint x="912.0" y="-125.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1065.0" y="-125.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="18.0" width="58.0" x="916.0" y="66.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_76" id="BPMNEdge_SequenceFlow_76" flowable:sourceDockerX="89.0" flowable:sourceDockerY="63.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="1865.5119577884368" y="344.19588254801613"></omgdi:waypoint>
+        <omgdi:waypoint x="2141.6722433252744" y="344.19588254801613"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_54" id="BPMNEdge_SequenceFlow_54" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1389.0" y="344.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1474.0" y="344.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_56" id="BPMNEdge_AssociationUndirected_56" flowable:sourceDockerX="54.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="397.0" flowable:targetDockerY="39.0">
+        <omgdi:waypoint x="572.0" y="165.0"></omgdi:waypoint>
+        <omgdi:waypoint x="572.0" y="258.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_57" id="BPMNEdge_AssociationUndirected_57" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="293.0" flowable:targetDockerY="62.0">
+        <omgdi:waypoint x="1339.0" y="384.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1339.0" y="588.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_43" id="BPMNEdge_AssociationUndirected_43" flowable:sourceDockerX="69.0" flowable:sourceDockerY="52.0" flowable:targetDockerX="293.0" flowable:targetDockerY="62.0">
+        <omgdi:waypoint x="-94.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-94.0" y="298.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-94.0" y="297.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-86.89085588270132" y="345.4243037936561"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_60" id="BPMNEdge_SequenceFlow_60" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="89.0" flowable:targetDockerY="74.0">
+        <omgdi:waypoint x="1165.0" y="-125.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1388.4525555176" y="-125.3708006608795"></omgdi:waypoint>
+        <omgdi:waypoint x="1388.4525555176" y="-125.3708006608795"></omgdi:waypoint>
+        <omgdi:waypoint x="1687.5119577884368" y="-125.37080066087948"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AssociationUndirected_55" id="BPMNEdge_AssociationUndirected_55" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="397.0" flowable:targetDockerY="39.0">
+        <omgdi:waypoint x="337.0" y="85.0"></omgdi:waypoint>
+        <omgdi:waypoint x="337.0" y="-86.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

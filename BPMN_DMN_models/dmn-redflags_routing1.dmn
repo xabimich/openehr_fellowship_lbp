@@ -1,0 +1,602 @@
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:flowable="http://flowable.org/dmn" xmlns:design="http://flowable.org/design" id="definition_redflags_routing1" name="Routing Red Flags Lumbalgia GPC ICS" namespace="http://www.flowable.org/dmn">
+  <decision id="redflags_routing1" name="Routing Red Flags Lumbalgia GPC ICS">
+    <description>Evaluates the Red Flags captured in the Lumbalgia_Checklist_CD_v0.3 template and decides the referral destination according to GPC ICS Low Back Pain. Hit policy FIRST. 12 boolean inputs, one per Red Flag from the guide. Output redFlagDestination string with values non...</description>
+    <decisionTable id="decisionTable_redflags_routing1" hitPolicy="FIRST">
+      <input label="Cauda equina syndrome (saddle anaesthesia, urinary or faecal retention)">
+        <inputExpression id="inputExpression_ie_cauda_equina" typeRef="boolean">
+          <text>rf_cauda_equina</text>
+        </inputExpression>
+      </input>
+      <input label="Progressive or severe neurological deficit">
+        <inputExpression id="inputExpression_ie_neuro_deficit" typeRef="boolean">
+          <text>rf_neuro_deficit_greu</text>
+        </inputExpression>
+      </input>
+      <input label="Significant recent trauma">
+        <inputExpression id="inputExpression_ie_trauma" typeRef="boolean">
+          <text>rf_trauma_recent</text>
+        </inputExpression>
+      </input>
+      <input label="Fever with suspected spinal infection (IV drug use, immunosuppression, history of spinal surgery)">
+        <inputExpression id="inputExpression_ie_febre_infeccio" typeRef="boolean">
+          <text>rf_febre_sospita_infeccio</text>
+        </inputExpression>
+      </input>
+      <input label="History of neoplasm">
+        <inputExpression id="inputExpression_ie_cancer" typeRef="boolean">
+          <text>rf_cancer_history</text>
+        </inputExpression>
+      </input>
+      <input label="Unexplained weight loss">
+        <inputExpression id="inputExpression_ie_weight_loss" typeRef="boolean">
+          <text>rf_weight_loss_unexplained</text>
+        </inputExpression>
+      </input>
+      <input label="Night pain not relieved by rest">
+        <inputExpression id="inputExpression_ie_night_pain" typeRef="boolean">
+          <text>rf_night_pain_no_relief</text>
+        </inputExpression>
+      </input>
+      <input label="Recent spinal surgery or procedure">
+        <inputExpression id="inputExpression_ie_spinal_surgery" typeRef="boolean">
+          <text>rf_recent_spinal_surgery</text>
+        </inputExpression>
+      </input>
+      <input label="Inflammatory pattern (morning stiffness &gt;30 min, alternating buttock pain, onset &lt;40 years)">
+        <inputExpression id="inputExpression_ie_inflammatory" typeRef="boolean">
+          <text>rf_inflammatory_pattern</text>
+        </inputExpression>
+      </input>
+      <input label="Use of corticosteroids or immunosuppressants">
+        <inputExpression id="inputExpression_ie_corticoides" typeRef="boolean">
+          <text>rf_corticosteroid_immuno</text>
+        </inputExpression>
+      </input>
+      <input label="Parenteral drug addiction">
+        <inputExpression id="inputExpression_ie_drug_iv" typeRef="boolean">
+          <text>rf_drug_iv</text>
+        </inputExpression>
+      </input>
+      <input label="High-risk age (&lt;20 or &gt;50-55 years)">
+        <inputExpression id="inputExpression_ie_age_alert" typeRef="boolean">
+          <text>rf_age_alert</text>
+        </inputExpression>
+      </input>
+      <output id="outputExpression_out_redFlagDestination" label="Red Flags Referral Destination" name="redFlagDestination" typeRef="string"></output>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_1">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_1">
+          <text><![CDATA["urgencies"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_2">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_2">
+          <text><![CDATA["urgencies"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_3">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_3">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_3">
+          <text><![CDATA["urgencies"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_4">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_4">
+          <text><![CDATA["urgencies"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_5">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_5">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_5">
+          <text><![CDATA["udr"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_6">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_6">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_6">
+          <text><![CDATA["udr"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_7">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_7">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_7">
+          <text><![CDATA["udr"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_8">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_8">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_8">
+          <text><![CDATA["udr"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_9">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_9">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_9">
+          <text><![CDATA["reumatologia"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_10">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_10">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_10">
+          <text><![CDATA["reumatologia"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_11">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_11">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_11">
+          <text><![CDATA["reumatologia"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_12">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_12">
+          <text><![CDATA[true]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_12">
+          <text><![CDATA["reumatologia"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_ie_cauda_equina_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_neuro_deficit_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_trauma_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_febre_infeccio_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_cancer_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_weight_loss_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_night_pain_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_spinal_surgery_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_inflammatory_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_corticoides_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_drug_iv_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_ie_age_alert_13">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_out_redFlagDestination_13">
+          <text><![CDATA["none"]]></text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI></dmndi:DMNDI>
+</definitions>
